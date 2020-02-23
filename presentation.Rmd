@@ -1,0 +1,55 @@
+---
+title: "Course Project: Shiny Application and Reproducible Pitch"
+author: "foena"
+date: "23 2 2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## About the Course Project
+
+This is a deliverable for the course Developing Data Products as part of the Coursera Data Science Specialization.
+
+Instructions:
+
+1. Write a shiny application with associated supporting documentation. The documentation should be thought of as whatever a user will need to get started using your application.
+2. Deploy the application on Rstudio's shiny server
+3. Share the application link by pasting it into the provided text box
+4. Share your server.R and ui.R code on github
+
+## How to use the application
+
+First of all, a dataset about the development of inhabitant’s in Austria is loaded from the government and read in. Within the application the user can choose the provincial state which should be displayed as well as the period in years. After the user chosen the input variables, the result is visualised by a barpolt. 
+
+The application is running on (https://foena.shinyapps.io/Assignment_4/).
+
+ui.R, and Server.R Code are also available in my github repository (https://github.com/foena1988/Shiny-Application-and-Reproducible-Pitch)
+
+## Used Dataset
+
+The data used in the app comes from the Vienna Government https://www.wien.gv.at/gogv/l9ogdbevoelkerungbl2017. 
+```{r, echo = FALSE}
+data <- read.csv("https://www.wien.gv.at/gogv/l9ogdbevoelkerungbl2017", sep=";",encoding = "UTF-8")
+data$FEDERAL_STATE = as.character(data$FEDERAL_STATE)
+data$FEDERAL_STATE[data$FEDERAL_STATE=="KÃ¤rnten"]="Carinthia"
+data$FEDERAL_STATE[data$FEDERAL_STATE=="NiederÃ¶sterreich"]="Lower Austria"
+data$FEDERAL_STATE[data$FEDERAL_STATE=="OberÃ¶sterreich"]="Upper Austria"
+data$FEDERAL_STATE[data$FEDERAL_STATE=="Steiermark"]="Styria"
+data$FEDERAL_STATE[data$FEDERAL_STATE=="Tirol"]="Tyrol"
+data$FEDERAL_STATE[data$FEDERAL_STATE=="Wien"]="Vienna"
+datensatz <- unique(data$POPULATION[which(data$FEDERAL_STATE=="Vienna" & data$YEAR>=1988 & data$YEAR<=2018)])
+```
+
+
+## Slide with Plot
+
+```{r pressure}
+xlab<-"Considered years"
+ylab<-"Number of Inhabitants"
+main<-"Development of Austria`s inhabitants separated by provencial states"
+barplot(datensatz,xlab = xlab,ylab = ylab, main = main,ylim = c(0,2100000))
+```
+
